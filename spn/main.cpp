@@ -46,14 +46,10 @@ unsigned short k4 = 0x4d63;
 unsigned short k5 = 0xd63f;
 unsigned short xtest[] = { 0xad21,0x5fff,0x6432 };
 unsigned short ytest[] = { 0x91e9,0x58ee,0xeff4 };
-
-
-
 void pishalf(unsigned short *a)
 {
 	*a = (pis[(*a >> 12)] << 12) + (pis[(*a >> 8) & 0x000f] << 8) + (pis[(*a >> 4) & 0x000f] << 4) + pis[*a & 0x000f];
 }
-
 void xor_plus(unsigned char * a,unsigned char * key)
 {
 	unsigned char * b = new unsigned char[16];
@@ -64,8 +60,6 @@ void xor_plus(unsigned char * a,unsigned char * key)
 	memcpy(a, b, 16);
 	delete(b);
 };
-
-
 void pishalf_plus(unsigned char * a)
 {
 	unsigned char * b = new unsigned char[16];
@@ -76,7 +70,6 @@ void pishalf_plus(unsigned char * a)
 	memcpy(a, b, 16);
 	delete(b);
 };
-
 void piswitch_plus(unsigned char * a)
 {
 	unsigned char * b = new unsigned char[16];
@@ -98,7 +91,6 @@ void piswitch_plus(unsigned char * a)
 	memcpy(a, b, 16);
 	delete(b);
 }
-
 void spn_plus(unsigned char * a, unsigned char * key)
 {
 	unsigned char * b = new unsigned char[16];
@@ -115,9 +107,6 @@ void spn_plus(unsigned char * a, unsigned char * key)
 	memcpy(a, b, 16);
 	delete(b);
 }
-
-
-
 void unpishalf(unsigned short *a)
 {
 	*a = (unpis[(*a >> 12)] << 12) + (unpis[(*a >> 8) & 0x000f] << 8) + (unpis[(*a >> 4) & 0x000f] << 4) + unpis[*a & 0x000f];
@@ -310,7 +299,7 @@ int main()
 
 	unsigned char msg[16] = { 0 };
 	FILE*  fp;
-	fopen_s(&fp, "D:\\spnp.txt", "wb");
+	fopen_s(&fp, "spnp.txt", "wb");
 	unsigned char kp0[16] = { 0 };
 	unsigned char * p = msg;
 	for (int i = 0; i < 640000; i++)
@@ -319,6 +308,19 @@ int main()
 		fwrite(p, 16 * sizeof(unsigned char), 1, fp);
 	};
 	fclose(fp);
+	FILE*  fp2;
+	fopen_s(&fp2, "spn.txt", "wb");
+	unsigned short kp;
+	kp = 0;
+	char * a = (char*)&kp;
+	for (int i = 0; i < 640000*8; i++)
+	{
+		kp = spn(kp);
+		fwrite(a, 2 * sizeof(unsigned char), 1, fp2);
+	};
+	fclose(fp2);
+
+
 	//unsigned short L = difatk();
 	//unsigned int i = forceatk(L);
 	return 0;
